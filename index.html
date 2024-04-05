@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Form Validation</title>
+		<!-- Linking Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<style>
+			
+			.error {
+				color: red; /* Error message color */
+			}
+			.container {
+				max-width: 350px; 
+				margin: 0 auto; /* Center align the form */
+				background-color: #fff; /* White background for the form */
+				padding: 20px; /* Adding some padding for better appearance */
+				border-radius: 8px; /* Rounding corners for the form */
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding shadow for depth */
+			}
+			.form-group {
+				margin-bottom: 20px; /* Adding space between form fields */
+			}
+			.btn-primary {
+				background-color: #007bff; /* Primary button color */
+				border-color: #007bff;
+			}
+			.btn-primary:hover {
+				background-color: #0056b3; /* Changing button color on hover */
+				border-color: #0056b3;
+			}
+			.btn-primary:focus {
+				box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5); 
+			}
+			body {
+				background-color: #f0f0f0;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="container mt-5">
+			<!-- Form -->
+			<form id="myForm">
+				<h4>Registration Form</h4>
+				<!-- Full Name Input -->
+				<div class="form-group">
+					<label for="fullName">Full Name:</label>
+					<input type="text" class="form-control" id="fullName" required onchange="validateName()">
+					<!-- Error message for full name -->
+					<div id="fullNameError" class="error"></div>
+				</div>
+				<!-- Email Input -->
+				<div class="form-group">
+					<label for="email">Email:</label>
+					<input type="email" class="form-control" id="email" required onchange="validateEmail()">
+					<!-- Error message for email -->
+					<div id="emailError" class="error"></div>
+				</div>
+				<!-- Phone Number Input -->
+				<div class="form-group">
+					<label for="phone">Phone Number:</label>
+					<input type="tel" class="form-control" id="phone" required onchange="validatePhone()">
+					<!-- Error message for phone number -->
+					<div id="phoneError" class="error"></div>
+				</div>
+				<!-- Password Input -->
+				<div class="form-group">
+					<label for="password">Password:</label>
+					<input type="password" class="form-control" id="password" required onchange="validatePassword()">
+					<!-- Error message for password -->
+					<div id="passwordError" class="error"></div>
+				</div>
+				<!-- Confirm Password Input -->
+				<div class="form-group">
+					<label for="confirmPassword">Confirm Password:</label>
+					<input type="password" class="form-control" id="confirmPassword" required onchange="validateConfirmPassword()">
+					<!-- Error message for confirm password -->
+					<div id="confirmPasswordError" class="error"></div>
+				</div>
+				<!-- Submit Button -->
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+
+		<script>
+			// JavaScript for form validation
+			// Adding submit event listener to the form
+			document.getElementById('myForm').addEventListener('submit', function(event) {
+				event.preventDefault(); // Preventing default form submission
+				validateForm(); // Calling validateForm function
+			});
+
+			// Function to validate form
+			function validateForm() {
+				// Retrieving values from form fields
+				const fullName = document.getElementById('fullName').value;
+				const email = document.getElementById('email').value;
+				const phone = document.getElementById('phone').value;
+				const password = document.getElementById('password').value;
+				const confirmPassword = document.getElementById('confirmPassword').value;
+
+				let isValid = true; // Initializing boolean variable for form validation
+
+				// Validating Full Name length
+				if (fullName.length < 5) {
+					isValid = false; //  Setting isValid to false if validation fails
+				}
+
+				// Validating Email
+				if (!email.includes('@')) {
+					isValid = false; // Setting isValid to false if validation fails
+				}
+
+				// Validate Phone Number length and format
+				if (phone.length !== 10 || phone === '123456789') {
+					isValid = false; //  Setting isValid to false if validation fails
+				}
+
+				// Validating Password 
+				if (password.length < 8 || password === 'password' || password === fullName) {
+					isValid = false; //  Setting isValid to false if validation fails
+				}
+				
+
+				// checking whether the Confirm Password and password fields are same
+				if (confirmPassword !== password) {
+					isValid = false; //  Setting isValid to false if validation fails
+				}
+
+				// If all fields are valid, submit the form
+				if (isValid) {
+					document.getElementById('myForm').submit(); // Submitting the form if there are no errors
+					alert("Your details submitted successfully"); // Displaying success message
+				}
+			}
+
+			// Function to validate Full Name input
+			function validateName() {
+				const fullName = document.getElementById('fullName').value;
+				if (fullName.length < 5) {
+					document.getElementById('fullNameError').innerText = 'Name must be at least 5 characters long';
+				} else {
+					document.getElementById('fullNameError').innerText = ''; // Clearing error message
+				}
+			}
+
+			// Function to validate Email input
+			function validateEmail() {
+				const email = document.getElementById('email').value;
+				if (!email.includes('@')) {
+					document.getElementById('emailError').innerText = 'Enter a valid email address';
+				} else {
+					document.getElementById('emailError').innerText = ''; // Clearing error message
+				}
+			}
+
+			// Function to validate Phone Number input
+			function validatePhone() {
+				const phone = document.getElementById('phone').value;
+				if (phone.length !== 10 || phone === '123456789') {
+					document.getElementById('phoneError').innerText = 'Enter a valid 10-digit phone number';
+				} else {
+					document.getElementById('phoneError').innerText = ''; // Clearing error message
+				}
+			}
+
+			// Function to validate Password input
+			function validatePassword() {
+				const password = document.getElementById('password').value;
+				const fullName = document.getElementById('fullName').value;
+				if (password.length < 8 || password === 'password' || password === fullName) {
+					document.getElementById('passwordError').innerText = 'Password is not strong and the length should not less than 8';
+				} else {
+					document.getElementById('passwordError').innerText = ''; // Clearing error message
+				}
+			}
+
+			// Function to validate Confirm Password input
+			function validateConfirmPassword() {
+				const confirmPassword = document.getElementById('confirmPassword').value;
+				const password = document.getElementById('password').value;
+				if (confirmPassword !== password) {
+					document.getElementById('confirmPasswordError').innerText = 'Passwords do not match';
+				} else {
+					document.getElementById('confirmPasswordError').innerText = ''; // Clearing error message
+				}
+			}
+		</script>
+
+	</body>
+</html>
